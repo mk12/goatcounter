@@ -19,7 +19,7 @@ import (
 	"zgo.at/goatcounter/v2/pkg/log"
 )
 
-//go:embed GeoLite2-Country.mmdb.gz
+// NOT EMBEDDING: GeoLite2-Country.mmdb.gz
 var bundle []byte
 
 var ctxkey = &struct{ n string }{"geo"}
