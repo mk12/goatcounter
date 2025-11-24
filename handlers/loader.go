@@ -23,10 +23,13 @@ var (
 	websocketFail    atomic.Int32
 )
 
-func init() { supportWebsocket.Store(true) }
+// func init() { supportWebsocket.Store(true) }
 
-func useWebsocket(r *http.Request) bool {
-	return supportWebsocket.Load() && r.URL.Query().Get("no-websocket") == ""
+func useWebsocket(_ *http.Request) bool {
+	// mkember: NearlyFreeSpeech only allows proxying HTTP or websockets, not
+	// both, so just hardcoding this off.
+	return false
+	// return supportWebsocket.Load() && r.URL.Query().Get("no-websocket") == ""
 }
 
 // On dashboard view we generate a unique ID we send to the frontend, and
