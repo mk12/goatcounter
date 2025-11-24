@@ -380,6 +380,25 @@ func (r *Reader) Country(ipAddress net.IP) (*Country, error) {
 	return &country, err
 }
 
+// mkember: For smaller .mmdb file.
+func (r *Reader) CountryISOCode(ipAddress net.IP) (string, error) {
+	if isCity&r.databaseType == 0 {
+		return "", InvalidMethodError{"City", r.Metadata().DatabaseType}
+	}
+	ip, ok := netip.AddrFromSlice(ipAddress)
+	if !ok {
+		return "", fmt.Errorf("not a valid IP: %#v", ipAddress)
+	}
+
+	l := r.mmdbReader.Lookup(ip)
+	if l.Err() != nil {
+		return "", l.Err()
+	}
+	var countryISO string
+	err := l.Decode(&countryISO)
+	return countryISO, err
+}
+
 // AnonymousIP takes an IP address as a net.IP struct and returns a
 // AnonymousIP struct and/or an error.
 func (r *Reader) AnonymousIP(ipAddress net.IP) (*AnonymousIP, error) {
