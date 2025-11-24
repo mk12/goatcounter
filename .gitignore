@@ -2,3 +2,6 @@
 /goatcounter.test
 /goatcounter.exe
 /goatcounter-data
+
+/goatcounter-bsd
+/db.sqlite3
