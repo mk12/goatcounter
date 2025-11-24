@@ -234,6 +234,11 @@ func cmdServe(f zli.Flags, ready chan<- struct{}, stop chan struct{}, saas bool)
 		*flagTLS.Pointer() = map[bool]string{true: "http", false: "acme"}[dev.Bool()]
 	}
 
+	zhttp.BasePath = strings.Trim(basePath.String(), "/")
+	if zhttp.BasePath != "" {
+		zhttp.BasePath = "/" + zhttp.BasePath
+	}
+
 	flagErrors(&v, errorsFlag.String())
 	flagEmail(&v, smtp.String())
 	geodb := setupGeo(&v, geodbFlag.String())
@@ -244,10 +249,6 @@ func cmdServe(f zli.Flags, ready chan<- struct{}, stop chan struct{}, saas bool)
 	v.Range("-store-every", int64(storeEvery.Int()), 1, 0)
 	cron.SetPersistInterval(time.Duration(storeEvery.Int()) * time.Second)
 
-	zhttp.BasePath = strings.Trim(basePath.String(), "/")
-	if zhttp.BasePath != "" {
-		zhttp.BasePath = "/" + zhttp.BasePath
-	}
 
 	if v.HasErrors() {
 		return v
